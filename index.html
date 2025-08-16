@@ -1,13 +1,47 @@
 <!doctype html>
-<html lang="">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Be The Better Myself</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        font-family: 'Segoe UI', 'Arial', sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #app {
+        background: rgba(255, 255, 255, 0.85);
+        border-radius: 24px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        padding: 48px 32px;
+        min-width: 320px;
+        min-height: 200px;
+        text-align: center;
+      }
+      h1 {
+        background: linear-gradient(90deg, #ff6a00, #ee0979, #2196f3);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 2.5rem;
+        margin-bottom: 16px;
+      }
+      p {
+        color: #444;
+        font-size: 1.1rem;
+      }
+    </style>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <h1>Be The Better Myself</h1>
+      <p>Welcome! Start your journey to a better you.</p>
+    </div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

@@ -86,50 +86,90 @@ function cancelEdit() {
 
 <style scoped>
 .container {
-  max-width: 600px;
-  margin: 2rem auto;
-  background: #fff;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px #eee;
+  max-width: 700px;
+  margin: 2.5rem auto;
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  padding: 2.5rem;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px #fda08555;
+  transition: box-shadow 0.3s;
+}
+.container:hover {
+  box-shadow: 0 8px 32px #f6d36588;
 }
 h2 {
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  color: #fff;
+  text-shadow: 1px 2px 8px #fda08588;
+  letter-spacing: 2px;
 }
 .book-form {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 .book-form input {
   flex: 1;
-  padding: 0.5rem;
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #fda085;
+  background: #fffbe7;
+  font-size: 1rem;
+  transition: border 0.2s;
+}
+.book-form input:focus {
+  border: 1.5px solid #f6d365;
+  outline: none;
 }
 .book-form button {
-  padding: 0.5rem 1rem;
+  padding: 0.7rem 1.3rem;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #fda085, #f6d365);
+  color: #fff;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #fda08533;
+  transition: background 0.2s;
+}
+.book-form button:hover {
+  background: linear-gradient(90deg, #f6d365, #fda085);
 }
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0 8px;
 }
 th,
 td {
-  padding: 0.75rem;
-  border-bottom: 1px solid #eee;
+  padding: 0.9rem;
+  background: #fffbe7;
+  border-radius: 8px;
   text-align: left;
+  font-size: 1.05rem;
+}
+th {
+  background: linear-gradient(90deg, #fda085, #f6d365);
+  color: #fff;
+  letter-spacing: 1px;
+  font-weight: bold;
+  text-shadow: 1px 1px 6px #fda08544;
 }
 button {
   margin-right: 0.5rem;
-  padding: 0.3rem 0.7rem;
+  padding: 0.4rem 1rem;
   border: none;
-  background: #409eff;
+  background: linear-gradient(90deg, #43cea2, #185a9d);
   color: #fff;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 2px 8px #185a9d33;
+  transition: background 0.2s;
 }
 button:last-child {
-  background: #f56c6c;
+  background: linear-gradient(90deg, #f85032, #e73827);
 }
 button:disabled {
   background: #ccc;
