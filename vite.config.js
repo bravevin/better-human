@@ -7,14 +7,10 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    vueJsx(),
-    vueDevTools(),
-  ],
+  plugins: [vue(), vueJsx(), vueDevTools()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
   server: {
@@ -27,6 +23,14 @@ export default defineConfig({
     },
     watch: {
       usePolling: true, // Ensures changes are picked up instantly
+    },
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        loglevel: 'debug',
+        rewrite: (path) => path.replace(/^\/api/, '/api'),
+      },
     },
   },
 })

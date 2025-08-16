@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h2>书籍管理列表</h2>
-    <form @submit.prevent="addBook" class="book-form">
+    <form @submit.prevent="addBookHandler" class="book-form">
       <input v-model="newBook.title" placeholder="书名" required />
       <input v-model="newBook.author" placeholder="作者" required />
       <button type="submit">添加书籍</button>
@@ -26,9 +26,9 @@
           </td>
           <td>
             <button v-if="editId !== book.id" @click="startEdit(book)">编辑</button>
-            <button v-else @click="saveEdit(book.id)">保存</button>
+            <button v-else @click="saveEditHandler(book.id)">保存</button>
             <button v-if="editId === book.id" @click="cancelEdit">取消</button>
-            <button @click="deleteBook(book.id)">删除</button>
+            <button @click="deleteBookHandler(book.id)">删除</button>
           </td>
         </tr>
       </tbody>
@@ -37,30 +37,31 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { getBooks, addBook, updateBook, deleteBook } from '../api/books'
 
-const books = ref([
-  { id: 1, title: 'The Great Gatsby', author: 'F. Scott Fitzgerald' },
-  { id: 2, title: '1984', author: 'George Orwell' },
-  { id: 3, title: 'To Kill a Mockingbird', author: 'Harper Lee' },
-])
-
+const books = ref([])
 const newBook = ref({ title: '', author: '' })
 const editId = ref(null)
 const editBook = ref({ title: '', author: '' })
 
-function addBook() {
+async function fetchBooks() {
+  const res = await getBooks()
+  books.value = res.data
+}
+
+onMounted(fetchBooks)
+
+async function addBookHandler() {
   if (!newBook.value.title || !newBook.value.author) return
-  books.value.push({
-    id: Date.now(),
-    title: newBook.value.title,
-    author: newBook.value.author,
-  })
+  const res = await addBook(newBook.value)
+  books.value.push(res.data)
   newBook.value.title = ''
   newBook.value.author = ''
 }
 
-function deleteBook(id) {
+async function deleteBookHandler(id) {
+  await deleteBook(id)
   books.value = books.value.filter((book) => book.id !== id)
 }
 
@@ -69,10 +70,11 @@ function startEdit(book) {
   editBook.value = { title: book.title, author: book.author }
 }
 
-function saveEdit(id) {
+async function saveEditHandler(id) {
+  const res = await updateBook(id, editBook.value)
   const idx = books.value.findIndex((b) => b.id === id)
   if (idx !== -1) {
-    books.value[idx] = { id, ...editBook.value }
+    books.value[idx] = res.data
   }
   editId.value = null
   editBook.value = { title: '', author: '' }
