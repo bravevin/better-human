@@ -33,7 +33,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="book in books" :key="book.id">
+        <tr v-for="book in pagedBooks" :key="book.id">
           <td v-if="editId !== book.id">{{ book.title }}</td>
           <td v-else>
             <input v-model="editBook.title" class="ui input colorful-input" />
@@ -66,11 +66,30 @@
         </tr>
       </tbody>
     </table>
+    <div class="ui pagination menu colorful-pagination" v-if="totalPages > 1">
+      <a class="item" :class="{ disabled: currentPage === 1 }" @click="changePage(currentPage - 1)"
+        >上一页 Prev</a
+      >
+      <a
+        v-for="page in totalPages"
+        :key="page"
+        class="item"
+        :class="{ active: currentPage === page }"
+        @click="changePage(page)"
+        >{{ page }}</a
+      >
+      <a
+        class="item"
+        :class="{ disabled: currentPage === totalPages }"
+        @click="changePage(currentPage + 1)"
+        >下一页 Next</a
+      >
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { getBooks, addBook, updateBook, deleteBook } from '../api/books'
 
 const books = ref([])
@@ -78,9 +97,24 @@ const newBook = ref({ title: '', author: '' })
 const editId = ref(null)
 const editBook = ref({ title: '', author: '' })
 
+// Pagination state
+const pageSize = ref(5)
+const currentPage = ref(1)
+const totalPages = computed(() => Math.max(1, Math.ceil(books.value.length / pageSize.value)))
+const pagedBooks = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value
+  return books.value.slice(start, start + pageSize.value)
+})
+
+function changePage(page) {
+  if (page < 1 || page > totalPages.value) return
+  currentPage.value = page
+}
+
 async function fetchBooks() {
   const res = await getBooks()
   books.value = res.data
+  currentPage.value = 1 // Reset to first page after fetch
 }
 
 onMounted(fetchBooks)
@@ -91,11 +125,16 @@ async function addBookHandler() {
   books.value.push(res.data)
   newBook.value.title = ''
   newBook.value.author = ''
+  currentPage.value = totalPages.value // Jump to last page if needed
 }
 
 async function deleteBookHandler(id) {
   await deleteBook(id)
   books.value = books.value.filter((book) => book.id !== id)
+  // If current page is now empty, go back one page if possible
+  if (pagedBooks.value.length === 0 && currentPage.value > 1) {
+    currentPage.value--
+  }
 }
 
 function startEdit(book) {
@@ -225,6 +264,35 @@ function cancelEdit() {
   color: #3a3a8c !important;
 }
 
+.colorful-pagination {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(90deg, #fbc2eb 0%, #a6c1ee 100%);
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  box-shadow: 0 2px 8px #a6c1ee55;
+}
+.colorful-pagination .item {
+  color: #6435c9 !important;
+  font-weight: bold;
+  border-radius: 6px !important;
+  margin: 0 0.2rem !important;
+  cursor: pointer;
+  background: #fff !important;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.colorful-pagination .item.active,
+.colorful-pagination .item:hover {
+  background: linear-gradient(90deg, #a1c4fd 0%, #c2e9fb 100%) !important;
+  color: #fff !important;
+}
+.colorful-pagination .item.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
 @media (max-width: 600px) {
   .ui.container.segment.colorful {
     padding: 1rem !important;
