@@ -29,7 +29,7 @@
         <tr>
           <th>书名 Title</th>
           <th>作者 Author</th>
-          <th style="width: 120px">操作 Actions</th>
+          <th style="width: 160px">操作 Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -161,7 +161,7 @@ function cancelEdit() {
 <style scoped>
 .ui.container.segment.colorful {
   margin-top: 2rem !important;
-  max-width: 800px !important;
+  max-width: 1100px !important;
   background: linear-gradient(120deg, #fbc2eb 0%, #a6c1ee 100%) !important;
   border-radius: 24px !important;
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15) !important;
@@ -220,19 +220,22 @@ function cancelEdit() {
 
 .book-table th,
 .book-table td {
-  padding: 0.5rem 0.7rem !important;
+  padding: 1.2rem 2.5rem !important; /* wider and longer */
   background: #f7faff !important;
-  border-radius: 6px !important;
+  border-radius: 12px !important;
   text-align: left;
-  height: 2.1rem;
-  font-size: 1rem;
+  height: 1.2rem; /* shorter row height */
+  font-size: 1.15rem;
+  min-width: 180px;
+  max-width: 600px;
+  word-break: break-all;
 }
 
 .book-table th {
   background: linear-gradient(90deg, #a1c4fd 0%, #c2e9fb 100%) !important;
   color: #3a3a8c !important;
   font-weight: bold !important;
-  font-size: 1.05rem !important;
+  font-size: 1.15rem !important;
   letter-spacing: 1px;
 }
 
@@ -293,13 +296,27 @@ function cancelEdit() {
   pointer-events: none;
   opacity: 0.5;
 }
-@media (max-width: 600px) {
+@media (max-width: 900px) {
   .ui.container.segment.colorful {
     padding: 1rem !important;
+    max-width: 100vw !important;
   }
-  .book-form .fields {
-    flex-direction: column;
-    gap: 0.5rem;
+  .book-table th,
+  .book-table td {
+    padding: 0.7rem 0.7rem !important;
+    font-size: 1rem;
+    min-width: 100px;
+    max-width: 300px;
+  }
+  .colorful-input {
+    font-size: 0.9rem !important;
+  }
+  .colorful-btn {
+    font-size: 0.9rem !important;
+    padding: 0.5rem 1rem !important;
+  }
+  .gradient-text {
+    font-size: 1.8rem;
   }
 }
 </style>
