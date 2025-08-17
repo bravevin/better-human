@@ -1,35 +1,68 @@
 <template>
-  <div class="container">
-    <h2>书籍管理列表</h2>
-    <form @submit.prevent="addBookHandler" class="book-form">
-      <input v-model="newBook.title" placeholder="书名" required />
-      <input v-model="newBook.author" placeholder="作者" required />
-      <button type="submit">添加书籍</button>
+  <div class="ui raised very padded colorful container segment">
+    <h2 class="ui header violet gradient-text">📚 书籍管理 Book Manager</h2>
+    <form @submit.prevent="addBookHandler" class="ui form book-form colorful-form">
+      <div class="fields">
+        <div class="field">
+          <input
+            v-model="newBook.title"
+            placeholder="书名 Title"
+            required
+            class="ui input colorful-input"
+          />
+        </div>
+        <div class="field">
+          <input
+            v-model="newBook.author"
+            placeholder="作者 Author"
+            required
+            class="ui input colorful-input"
+          />
+        </div>
+        <div class="field">
+          <button type="submit" class="ui primary button colorful-btn">添加 Add</button>
+        </div>
+      </div>
     </form>
-    <table>
+    <table class="ui celled striped compact small violet table book-table colorful-table">
       <thead>
         <tr>
-          <th>书名</th>
-          <th>作者</th>
-          <th>操作</th>
+          <th>书名 Title</th>
+          <th>作者 Author</th>
+          <th style="width: 120px">操作 Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="book in books" :key="book.id">
           <td v-if="editId !== book.id">{{ book.title }}</td>
           <td v-else>
-            <input v-model="editBook.title" />
+            <input v-model="editBook.title" class="ui input colorful-input" />
           </td>
           <td v-if="editId !== book.id">{{ book.author }}</td>
           <td v-else>
-            <input v-model="editBook.author" />
+            <input v-model="editBook.author" class="ui input colorful-input" />
           </td>
           <td>
-            <button v-if="editId !== book.id" @click="startEdit(book)">编辑</button>
-            <button v-else @click="saveEditHandler(book.id)">保存</button>
-            <button v-if="editId === book.id" @click="cancelEdit">取消</button>
-            <button @click="deleteBookHandler(book.id)">删除</button>
+            <template v-if="editId === book.id">
+              <button @click="saveEditHandler(book.id)" class="ui green mini button colorful-btn">
+                保存 Save
+              </button>
+              <button @click="cancelEdit" class="ui grey mini button colorful-btn">
+                取消 Cancel
+              </button>
+            </template>
+            <template v-else>
+              <button @click="startEdit(book)" class="ui blue mini button colorful-btn">
+                编辑 Edit
+              </button>
+              <button @click="deleteBookHandler(book.id)" class="ui red mini button colorful-btn">
+                删除 Delete
+              </button>
+            </template>
           </td>
+        </tr>
+        <tr v-if="books.length === 0">
+          <td colspan="3" style="text-align: center; color: #aaa">暂无书籍 No books</td>
         </tr>
       </tbody>
     </table>
@@ -87,94 +120,118 @@ function cancelEdit() {
 </script>
 
 <style scoped>
-.container {
-  max-width: 700px;
-  margin: 2.5rem auto;
-  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-  padding: 2.5rem;
-  border-radius: 18px;
-  box-shadow: 0 4px 24px #fda08555;
-  transition: box-shadow 0.3s;
+.ui.container.segment.colorful {
+  margin-top: 2rem !important;
+  max-width: 800px !important;
+  background: linear-gradient(120deg, #fbc2eb 0%, #a6c1ee 100%) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15) !important;
+  padding: 2.5rem 2rem 2.5rem 2rem !important;
 }
-.container:hover {
-  box-shadow: 0 8px 32px #f6d36588;
-}
-h2 {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #fff;
-  text-shadow: 1px 2px 8px #fda08588;
+
+.gradient-text {
+  background: linear-gradient(90deg, #ff6a00, #ee0979, #2196f3, #43cea2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 2.1rem;
+  margin-bottom: 1.5rem;
   letter-spacing: 2px;
+  text-align: center;
 }
-.book-form {
+
+.book-form.colorful-form {
+  margin-bottom: 1.5rem;
+  background: linear-gradient(90deg, #f9f586 0%, #ffecd2 100%);
+  border-radius: 12px;
+  padding: 0.7rem 0.5rem;
+  box-shadow: 0 2px 8px #fbc2eb55;
+}
+
+.book-form .fields {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: 0.7rem;
 }
-.book-form input {
+
+.book-form .field {
   flex: 1;
-  padding: 0.7rem;
-  border-radius: 8px;
-  border: 1px solid #fda085;
-  background: #fffbe7;
-  font-size: 1rem;
-  transition: border 0.2s;
 }
-.book-form input:focus {
-  border: 1.5px solid #f6d365;
-  outline: none;
+
+.colorful-input {
+  background: #e0f7fa !important;
+  border: 1.5px solid #a7c7e7 !important;
+  border-radius: 8px !important;
+  font-size: 1rem !important;
+  color: #333 !important;
 }
-.book-form button {
-  padding: 0.7rem 1.3rem;
-  border-radius: 8px;
-  background: linear-gradient(90deg, #fda085, #f6d365);
-  color: #fff;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 2px 8px #fda08533;
-  transition: background 0.2s;
-}
-.book-form button:hover {
-  background: linear-gradient(90deg, #f6d365, #fda085);
-}
-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 8px;
-}
-th,
-td {
-  padding: 0.9rem;
-  background: #fffbe7;
-  border-radius: 8px;
-  text-align: left;
-  font-size: 1.05rem;
-}
-th {
-  background: linear-gradient(90deg, #fda085, #f6d365);
-  color: #fff;
+
+.colorful-btn {
+  border-radius: 8px !important;
+  font-weight: bold !important;
+  box-shadow: 0 2px 8px #38f9d755 !important;
   letter-spacing: 1px;
-  font-weight: bold;
-  text-shadow: 1px 1px 6px #fda08544;
 }
-button {
-  margin-right: 0.5rem;
-  padding: 0.4rem 1rem;
-  border: none;
-  background: linear-gradient(90deg, #43cea2, #185a9d);
-  color: #fff;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  box-shadow: 0 2px 8px #185a9d33;
-  transition: background 0.2s;
+
+.colorful-table {
+  background: linear-gradient(90deg, #fbc2eb 0%, #a6c1ee 100%);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px #a6c1ee55;
 }
-button:last-child {
-  background: linear-gradient(90deg, #f85032, #e73827);
+
+.book-table th,
+.book-table td {
+  padding: 0.5rem 0.7rem !important;
+  background: #f7faff !important;
+  border-radius: 6px !important;
+  text-align: left;
+  height: 2.1rem;
+  font-size: 1rem;
 }
-button:disabled {
-  background: #ccc;
-  cursor: not-allowed;
+
+.book-table th {
+  background: linear-gradient(90deg, #a1c4fd 0%, #c2e9fb 100%) !important;
+  color: #3a3a8c !important;
+  font-weight: bold !important;
+  font-size: 1.05rem !important;
+  letter-spacing: 1px;
+}
+
+.ui.button.colorful-btn,
+.ui.button.colorful-btn:focus {
+  background-image: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%) !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+.ui.button.colorful-btn:hover {
+  background-image: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%) !important;
+}
+
+.ui.button.red.colorful-btn {
+  background-image: linear-gradient(90deg, #f85032 0%, #e73827 100%) !important;
+}
+
+.ui.button.blue.colorful-btn {
+  background-image: linear-gradient(90deg, #2196f3 0%, #43cea2 100%) !important;
+}
+
+.ui.button.green.colorful-btn {
+  background-image: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%) !important;
+}
+
+.ui.button.grey.colorful-btn {
+  background-image: linear-gradient(90deg, #b6c0e0 0%, #e0c3fc 100%) !important;
+  color: #3a3a8c !important;
+}
+
+@media (max-width: 600px) {
+  .ui.container.segment.colorful {
+    padding: 1rem !important;
+  }
+  .book-form .fields {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }
 </style>
